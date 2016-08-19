@@ -1,0 +1,31 @@
+{% extends 'main.html' %}
+
+{% block messages %}
+    {% if username %}
+            <div style="width: 60%; height: 100%; padding: 5px; padding-right: 20px; border: solid 1px black; float: left; position: relative; left: 2%; ">
+                <form action="addmessage{{ user_id }}" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input class="button" type="submit" value="Отправить сообщение"> Пользователю:
+                    <a href="id{{ user_id }}"> {{ messageusername }} </a>
+                </form>
+                {% for iter in mesall %}
+                    {% if iter.id in inlist %}
+                        <div  style="position: relative; left: 2%;">
+                            <pre><a href="id{{ id }}">{{ iter.message_user_name }}</a></pre>
+                            <pre>    {{ iter.message_text }}</pre>
+                            <pre>{{ iter.message_date }}</pre>
+                        </div>
+                        <hr>
+                    {% elif iter.id in outlist %}
+                        <div  style="position: relative; right: 2%;" align="right">
+                            <pre><a href="id{{ user_id }}">{{ iter.message_user_name }}</a></pre>
+                            <pre>    {{ iter.message_text }}</pre>
+                            <pre>{{ iter.message_date }}</pre>
+                        </div>
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+
+{% block messages %}
+    {% if username %}
+            <div style="width: 60%; height: 100%; padding: 5px; padding-right: 20px; border: solid 1px black; float: left; position: relative; left: 2%; ">
+                {% for allmes in mesall %}
+                    {% if allmes.id in idlist %}
+                        {% if allmes.message_outuser_id == us_id %}
+                            <p><a href="message{{ allmes.message_user_id }}"> {{ allmes.message_user_name }}</a></p>
+                            <pre>{{ allmes.message_outuser_name }}:</pre>
+                            <pre>Сообщение: {{ allmes.message_text }}</pre>
+                            <pre>Дата: {{ allmes.message_date }}</pre>
+                            {% if allmes.message_see == 0 %}
+                                <pre>Состояние: Прочитано!</pre>
+                            {% elif allmes.message_see == 1 %}
+                                <pre>Состояние: Не прочитано!</pre>
+                            {% endif %}
+                            <hr>
+                        {% else %}
+                            <p><a href="message{{ allmes.message_outuser_id }}">{{ allmes.message_outuser_name }}</a></p>
+                            <pre>{{ allmes.message_user_name }}:</pre>
+                            <pre>Сообщение: {{ allmes.message_text }} </pre>
+                            <pre>Дата: {{ allmes.message_date }}</pre>
+                            {% if allmes.message_see == 0 %}
+                                <pre>Состояние: Прочитано!</pre>
+                            {% elif allmes.message_see == 1 %}
+                                <pre>Состояние: Не прочитано!</pre>
+                            {% endif %}
+                            <hr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+    {% endif %}
+{% endblock %}

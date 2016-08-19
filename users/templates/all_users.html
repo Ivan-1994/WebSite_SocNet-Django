@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+{% load staticfiles %}
+
+{% block users %}
+    {% if username %}
+            <div style="width: 60%; height: 100%; padding: 5px; padding-right: 20px; border: solid 1px black; float: left; position: relative; left: 2%; ">
+                {% for rec in records %}
+                    <a href="/id{{ rec.id }}"> {{ rec.first_name }} {{ rec.last_name }}</a><br>
+
+                    {{ rec.is_active }}<br>
+                    <hr>
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+            <div class="large-offset-3 large-6 columns">
+                <p>Авторизируйтесь или идите на ...</p>
+                <div class="label round secondary"><a href="/">Войти</a></div>
+                <div class="label round secondary"><a href="/register/">Регистрация</a></div>
+            </div>
+    {% endif %}
+{% endblock %}
+
+

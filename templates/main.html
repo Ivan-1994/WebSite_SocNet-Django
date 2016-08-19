@@ -1,0 +1,47 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ВЖопе</title>
+    <link rel="stylesheet" type="text/css" href="{% static "static/css/foundation.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "static/css/lightbox.css" %}">
+</head>
+<body>
+<div class="top-bar">
+    <section class="top-bar-section">
+        <ul class="right">
+            {% if username %}
+                <li><a href="/logout/">Выйти ({{ username }})</a></li>
+            {% else %}
+                <li><a href="/">Войти</a></li>
+            {% endif %}
+        </ul>
+    </section>
+</div>
+    {% if username %}
+        <h4><a href="/id{{ id }}"><b><pre>       ВЖопе</pre></b></a></h4>
+    {% else %}
+        <h4><a href="/"><b><pre>       ВЖопе</pre></b></a></h4>
+    {% endif %}
+<div class="row">
+{% if username %}
+    <div style="width: 680pt; margin: auto;">
+        <div style="width: 200px; padding: 5px; padding-right: 20px; border: solid 1px black; float: left;">
+            <ui>
+                <li><a href="/id{{ id }}">Моя Страница</a></li>
+                <li><a href="/messages">Мои Сообщения
+                {% if see > 0 %}
+                    +{{ see }}
+                {% endif %}</a></li>
+                <li><a href="/all_users">Все Пользователи</a></li>
+            </ui>
+        </div>
+{% block users %}{% endblock %}
+{% block messages %}{% endblock %}
+<script src="{% static "static\js\lightbox-plus-jquery.js" %}"></script>
+    </div>
+</div>
+{% endif %}
+{% block login %}{% endblock %}
+</body>
+</html>

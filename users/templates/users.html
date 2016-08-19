@@ -1,0 +1,169 @@
+{% extends 'main.html' %}
+{% load staticfiles %}
+
+{% block users %}
+    {% if username %}
+            <div style="width: 60%; height: 100%; padding: 5px; padding-right: 20px; border: solid 1px black; float: left; position: relative; left: 2%; ">
+
+                <div style="width: 100%; float: left;">
+                    {{ first_name }} {{ last_name }}
+                </div>
+
+                <div style="width: 200px; height: 270px; border: solid 1px black; float: left; position: relative; top: 1%; left: 1%; ">
+                    {% if id == user_id %}
+                        {% if idava != 0 %}
+                            {% for po in photos %}
+                                {% if po.id == idava %}
+                                        <a class="example-image-link" href="/static/{{ po.abpho_user_photo }}" data-lightbox="example-2" data-title="{{ po.a }}">
+                                        <img class="example-image" src="/static/{{ po.abpho_user_photo }}" width="198" height="268"></a>
+                                        <br><br>
+                                        <form action="delphoto{{ po.id }}" method="post">
+                                            {% csrf_token %}
+                                            <input class="button" type="submit" value="Удалить">
+                                        </form>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <form enctype="multipart/form-data" action="albompho" method="post">
+                                {% csrf_token %}
+                                {{ phal }}
+                                <input class="button" type="submit" value="Загрузить">
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        {% if idava != 0 %}
+                            {% for po in photos %}
+                                {% if po.id == idava %}
+                                        <a class="example-image-link" href="/static/{{ po.abpho_user_photo }}" data-lightbox="example-2" data-title="{{ po.a }}">
+                                        <img class="example-image" src="/static/{{ po.abpho_user_photo }}" width="198" height="268"></a>
+                                        <br><br>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                    {% if id != user_id %}
+                        <form action="message{{ user_id }}" method="post">
+                            {% csrf_token %}
+                            <input class="button" type="submit" value="Отправить сообщение">
+                        </form>
+                    {% endif %}
+                </div>
+
+                <div style="width: 60%; height: 90%; padding: 5px; padding-right: 20px; border: solid 1px black; float: left; position: relative; left: 2%; ">
+                    <form action="bdrecords{{ user_id }}" method="post">
+                        {% csrf_token %}
+                        {{ form }}
+                       <!-- <input type="text" name="record" id="record">-->
+                        <input class="button" type="submit" value="Насрать">
+                    </form>
+                    {% for rec in records %}
+
+                        {% if rec.repost_repost_user_id == null %}
+
+                            {% if rec.records_user_id ==  user_id %}
+
+                                    {% if user_id == id %} <a href="delpost{{ rec.id }}"><img src="{% static "delet.png" %}" width="20pt" height="20pt"></a>{% endif %}
+
+                                        <a href="/id{{ rec.records_inuser_id }}"> {{ rec.records_user_first }} {{ rec.records_user_last }}</a>:
+
+                                    <p><pre>    {{ rec.records_text }}</pre></p>
+
+                                    <pre style="font-size: 8pt">Опубликовано: {{ rec.records_date }}</pre>
+
+                                    <a href="/addrepost{{ rec.id }}" style="font-size: 8pt"><b> Repost: </b><img src="{% static "repost.png" %}" width="20px" height="30px"> </a>
+                                    <a href="/killlike{{ rec.id }}" style="font-size: 8pt"><b> DIZlike: </b><img src="{% static "diz.jpg" %}" height="25px" width="25px"></a>
+                                    <a href="/addlike{{ rec.id }}" style="font-size: 8pt"><b> Like: </b><img src="{% static "images.jpg" %}" height="25px" width="25px">{{ rec.records_likes }}</a>
+
+                                    <div style="padding-left: 15pt">
+                                        {% for com in comments %}
+                                            {% if rec.id ==  com.comments_records_id %}
+
+                                                {% if user_id == id %} <a href="delpost{{ rec.id }}"><img src="{% static "delet.png" %}" width="20pt" height="20pt"></a>{% endif %}
+
+                                                    <a href="/id{{ com.comments_users_id }}"> {{ com.comments_users_first }} {{ com.comments_users_last }}</a>:
+
+                                                <p><pre>    {{ com.comments_users_text }}</pre></p>
+
+                                                <pre style="font-size: 8pt">Опубликовано: {{ com.comments_users_date }}</pre>
+
+                                                <a href="/killlikecom{{ com.id }}/{{ user_id }}" style="font-size: 8pt"><b> DIZlike: </b><img src="{% static "diz.jpg" %}" height="25px" width="25px"></a>
+                                                <a href="/addlikecom{{ com.id }}/{{ user_id }}" style="font-size: 8pt"><b> Like: </b><img src="{% static "images.jpg" %}" height="25px" width="25px">{{ com.comments_users_like }}</a>
+                                                <br>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div style="padding-left: 15pt">
+                                        <form action="addcomment{{ rec.id }}/{{ user_id }}" method="post">
+                                            {% csrf_token %}
+                                            {{ comment }}
+                                           <!-- <input type="text" name="record" id="record">-->
+                                            <input class="button" type="submit" value="Обосрать">
+                                        </form>
+                                    </div>
+                                <hr>
+                            {% endif %}
+                        {% else %}
+                            {% if rec.repost_repost_user_id ==  user_id %}
+                                {% if user_id == id %}<a href="delpost{{ rec.id }}"><img src="{% static "delet.png" %}" width="20pt" height="20pt"></a>{% endif %}
+
+                                <a href="/id{{ rec.repost_repost_user_id }}">{{ rec.repost_repost_first }} {{ rec.repost_repost_last }}</a>
+
+                                <div style="padding-left: 15pt">
+
+                                    <img src="{% static "repost.png" %}" width="15px" height="30px"> <a href="/id{{ rec.records_inuser_id }}"> {{ rec.records_user_first }} {{ rec.records_user_last }}</a>:
+
+                                    <p style="font-size: 8pt">Опубликовано: {{ rec.records_date }}</p>
+
+                                    <p><pre>    {{ rec.records_text }}</pre></p>
+
+                                </div>
+
+                                <pre style="font-size: 8pt">Репост: {{ rec.repost_repost_date }}</pre>
+
+                                <a href="/addrepost{{ rec.id }}" style="font-size: 8pt"><b> Repost: </b><img src="{% static "repost.png" %}" width="20px" height="30px"> </a>
+                                <a href="/killlikere{{ rec.id }}" style="font-size: 8pt"><b> DIZlike: </b><img src="{% static "diz.jpg" %}" height="25px" width="25px"></a>
+                                <a href="/addlikere{{ rec.id }}" style="font-size: 8pt"><b> Like: </b><img src="{% static "images.jpg" %}" height="25px" width="25px">{{ rec.repost_repost_likes }}</a>
+
+                                    <div style="padding-left: 15pt">
+                                        {% for com in comments %}
+                                            {% if rec.id ==  com.comments_records_id %}
+
+                                                {% if user_id == id %} <a href="delpost{{ rec.id }}"><img src="{% static "delet.png" %}" width="20pt" height="20pt"></a>{% endif %}
+
+                                                    <a href="/id{{ com.comments_users_id }}"> {{ com.comments_users_first }} {{ com.comments_users_last }}</a>:
+
+                                                <p><pre>    {{ com.comments_users_text }}</pre></p>
+
+                                                <pre style="font-size: 8pt">Опубликовано: {{ com.comments_users_date }}</pre>
+
+                                                <a href="/killlikecom{{ com.id }}/{{ user_id }}" style="font-size: 8pt"><b> DIZlike: </b><img src="{% static "diz.jpg" %}" height="25px" width="25px"></a>
+                                                <a href="/addlikecom{{ com.id }}/{{ user_id }}" style="font-size: 8pt"><b> Like: </b><img src="{% static "images.jpg" %}" height="25px" width="25px">{{ com.comments_users_like }}</a>
+                                                <br>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div style="padding-left: 15pt">
+                                        <form action="addcomment{{ rec.id }}/{{ user_id }}" method="post">
+                                            {% csrf_token %}
+                                            {{ comment }}
+                                           <!-- <input type="text" name="record" id="record">-->
+                                            <input class="button" type="submit" value="Обосрать">
+                                        </form>
+                                    </div>
+                                <hr>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            </div>
+    {% else %}
+        <div class="large-offset-3 large-6 columns">
+            <p>Авторизируйтесь или идите на ...</p>
+            <div class="label round secondary"><a href="/">Войти</a></div>
+            <div class="label round secondary"><a href="/register/">Регистрация</a></div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
